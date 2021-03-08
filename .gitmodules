@@ -1,3 +1,6 @@
 [submodule "hyfaa-scheduler"]
 	path = hyfaa-scheduler
 	url = https://github.com/pi-geosolutions/hyfaa-scheduler.git
+[submodule "hyfaa-database"]
+	path = hyfaa-database
+	url = https://github.com/pi-geosolutions/hyfaa-database.git
