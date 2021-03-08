@@ -4,3 +4,9 @@
 [submodule "hyfaa-database"]
 	path = hyfaa-database
 	url = https://github.com/pi-geosolutions/hyfaa-database.git
+[submodule "hyfaa-backend"]
+	path = hyfaa-backend
+	url = https://github.com/pi-geosolutions/hyfaa-backend.git
+[submodule "hyfaa-frontend"]
+	path = hyfaa-frontend
+	url = https://github.com/pi-geosolutions/hyfaa-backend.git
