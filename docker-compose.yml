@@ -1,0 +1,20 @@
+version: '3.7'
+volumes:
+  pg_data:
+
+services:
+  db:
+    image: pigeosolutions/hyfaa-postgis:10-3.1
+    build: ./hyfaa-database
+    environment:
+      POSTGRES_DB: mgb_hyfaa
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - net
+
+networks:
+  net:
