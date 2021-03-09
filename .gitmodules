@@ -9,4 +9,4 @@
 	url = https://github.com/pi-geosolutions/hyfaa-backend.git
 [submodule "hyfaa-frontend"]
 	path = hyfaa-frontend
-	url = https://github.com/pi-geosolutions/hyfaa-backend.git
+	url = https://github.com/pi-geosolutions/hyfaa-frontend.git
