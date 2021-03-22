@@ -1,12 +1,12 @@
 [submodule "hyfaa-scheduler"]
 	path = hyfaa-scheduler
-	url = https://github.com/pi-geosolutions/hyfaa-scheduler.git
+	url = https://github.com/OMP-IRD/hyfaa-scheduler.git
 [submodule "hyfaa-database"]
 	path = hyfaa-database
-	url = https://github.com/pi-geosolutions/hyfaa-database.git
+	url = https://github.com/OMP-IRD/hyfaa-database.git
 [submodule "hyfaa-backend"]
 	path = hyfaa-backend
-	url = https://github.com/pi-geosolutions/hyfaa-backend.git
+	url = https://github.com/OMP-IRD/hyfaa-backend.git
 [submodule "hyfaa-frontend"]
 	path = hyfaa-frontend
-	url = https://github.com/pi-geosolutions/hyfaa-frontend.git
+	url = https://github.com/OMP-IRD/hyfaa-frontend.git
