@@ -6,15 +6,40 @@ services:
   db:
     image: pigeosolutions/hyfaa-postgis:10-3.1
     build: ./hyfaa-database
-    environment:
-      POSTGRES_DB: mgb_hyfaa
-      POSTGRES_PASSWORD: pass
+    env_file:
+      - pg.env
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:
       - net
+#
+#  scheduler:
+#    restart: "no"
+#    image: pigeosolutions/hyfaa-scheduler:4.0
+#    build: ./hyfaa-scheduler
+#    volumes:
+#      - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/work
+#    networks:
+#      - net
+
+  pg_tileserv:
+    image: pigeosolutions/pg_tileserv:latest-alpine-3.12
+    build:
+      context: ./pg_tileserv
+      dockerfile: Dockerfile.alpine
+      args:
+        VERSION: latest-alpine-3.12
+    env_file:
+      - pg_tileserv.env
+    depends_on:
+      - db
+    ports:
+      - 7800:7800
+    networks:
+      - net
+
 
 networks:
   net:

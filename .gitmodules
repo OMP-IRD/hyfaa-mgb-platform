@@ -10,3 +10,6 @@
 [submodule "hyfaa-frontend"]
 	path = hyfaa-frontend
 	url = https://github.com/OMP-IRD/hyfaa-frontend.git
+[submodule "pg_tileserv"]
+	path = pg_tileserv
+	url = https://github.com/CrunchyData/pg_tileserv.git
