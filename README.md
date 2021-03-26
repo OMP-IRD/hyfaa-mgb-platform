@@ -49,5 +49,5 @@ docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
 The pg_tileserv server is accessible on http://localhost/tiles
 
 The interesting layers are:
-- **hyfaa.data_with_assim_aggregate_geo**: the MGB/HYFAA flow data for the last 15 days, in a json field (list of { date, flow, flow_anomaly} objects).
+- **hyfaa.data_with_assim_aggregate_geo**: the MGB/HYFAA flow data for the last 15 days, in a json field (list of { date, flow_median, flow_anomaly} objects).
 - **geospatial.stations_geo**: the stations that can be queried for graph view 
