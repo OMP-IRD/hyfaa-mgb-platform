@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  db:
+    environment:
+      - WITH_SAMPLE_DATA=yes
+
+#  pg-tileserv:
+#    ports:
+#      - 7800:7800

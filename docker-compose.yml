@@ -39,6 +39,9 @@ services:
 
   pg-tileserv:
     image: pigeosolutions/pg_tileserv:latest-alpine-3.12
+    entrypoint: ["/wait-for-db.sh"]
+    depends_on:
+      - db
     build:
       context: ./pg_tileserv
       dockerfile: Dockerfile.alpine
@@ -46,8 +49,6 @@ services:
         VERSION: latest-alpine-3.12
     env_file:
       - pg_tileserv.env
-    depends_on:
-      - db
 #    ports:
 #      - 7800:7800
     volumes:
@@ -55,7 +56,6 @@ services:
     networks:
       - internal
       - web
-
 
 networks:
   web:
