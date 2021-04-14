@@ -20,6 +20,10 @@ If you have already cloned it, you should update it:
 ## Build the docker images
 `docker-compose -f docker-compose.yml -f docker-compose-production.yml build`
 
+or if you're going to just use it for development
+
+`docker-compose build`
+
 ## Run the platform
 Several docker-compose files are provided, that you can mix depending on the scenario
 

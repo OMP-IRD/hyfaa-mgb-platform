@@ -34,7 +34,7 @@ services:
       context: ./hyfaa-backend
       dockerfile: docker/Dockerfile
     environment:
-      - DATABASE_URI=postgresql://hyfaa_backend:hyfaa_backend@db:5432/mgb_hyfaa
+      - DATABASE_URI=postgresql://hyfaa_publisher:hyfaa_publisher@db:5432/mgb_hyfaa
     volumes:
       - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/hyfaa-scheduler/data
     networks:
