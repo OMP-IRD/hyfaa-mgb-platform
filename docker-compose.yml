@@ -27,6 +27,20 @@ services:
       - 5432:5432
     networks:
       - internal
+
+  backend:
+    image: pigeosolutions/hyfaa-backend:1.0
+    build:
+      context: ./hyfaa-backend
+      dockerfile: docker/Dockerfile
+    environment:
+      - DATABASE_URI=postgresql://hyfaa_backend:hyfaa_backend@db:5432/mgb_hyfaa
+    volumes:
+      - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/hyfaa-scheduler/data
+    networks:
+      - internal
+      - web
+
 #
 #  scheduler:
 #    restart: "no"
