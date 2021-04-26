@@ -9,9 +9,13 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./config/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/nginx/templates:/etc/nginx/templates
+    environment:
+      - NGINX_PUBLIC_HOST=mgb-hyfaa.pigeo.fr
     depends_on:
       - pg-tileserv
+      - backend
+      - frontend
     restart: unless-stopped
     networks:
       - web

@@ -1,6 +1,9 @@
 version: '3.7'
 
 services:
+  nginx-proxy:
+    environment:
+      - NGINX_PUBLIC_HOST=localhost
   db:
     ports:
       - 5432:5432
