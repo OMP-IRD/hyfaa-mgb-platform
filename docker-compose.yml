@@ -12,6 +12,7 @@ services:
       - ./config/nginx/templates:/etc/nginx/templates
     environment:
       - NGINX_PUBLIC_HOST=mgb-hyfaa.pigeo.fr
+      - NGINX_HYFAA_ASSIM_HOST=hyfaa.pigeo.fr
     depends_on:
       - pg-tileserv
       - backend
@@ -23,6 +24,14 @@ services:
   frontend:
     image: pigeosolutions/hyfaa-frontend:latest
     restart: unless-stopped
+    networks:
+      - web
+
+  frontend-assim:
+    image: pigeosolutions/hyfaa-frontend:latest
+    restart: unless-stopped
+    volumes:
+      - ./config/frontend/assets/settings.json:/usr/share/nginx/html/assets/settings.json
     networks:
       - web
 

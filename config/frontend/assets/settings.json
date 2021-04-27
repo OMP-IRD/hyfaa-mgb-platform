@@ -1,0 +1,15 @@
+{
+  "apiUrl": "",
+  "riverMVTUrl": "/tiles/hyfaa.data_with_assim_aggregate_geo/{z}/{x}/{y}.pbf",
+  "stationMVTUrl": "/tiles/geospatial.stations_geo/{z}/{x}/{y}.pbf",
+  "backgroundLayers": [
+    {
+      "type": "xyz",
+      "url": "https://api.mapbox.com/styles/v1/adrienon/cknfy8t1w0htp18mw91u1q30r/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWRyaWVub24iLCJhIjoiY2tuZWxycmlxMXNtMjJwbXJ5MjcyaWtjZiJ9.MGxPcwnAG_fYOT1pFHqdng"
+    },
+    {
+      "type": "xyz",
+      "url": "https://api.mapbox.com/styles/v1/adrienon/ckneltjbf372i18o1oqu5m1jb/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWRyaWVub24iLCJhIjoiY2tuZWxycmlxMXNtMjJwbXJ5MjcyaWtjZiJ9.MGxPcwnAG_fYOT1pFHqdng"
+    }
+  ]
+}
