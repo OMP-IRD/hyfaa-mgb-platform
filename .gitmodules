@@ -13,3 +13,6 @@
 [submodule "pg_tileserv"]
 	path = pg_tileserv
 	url = https://github.com/OMP-IRD/pg_tileserv.git
+[submodule "hyfaa-site"]
+	path = hyfaa-site
+	url = git@github.com:OMP-IRD/hyfaa-site.git
