@@ -21,6 +21,12 @@ services:
     networks:
       - web
 
+  site:
+    image: pigeosolutions/hyfaa-site:latest
+    restart: unless-stopped
+    networks:
+      - web
+
   frontend:
     image: pigeosolutions/hyfaa-frontend:latest
     restart: unless-stopped
