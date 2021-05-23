@@ -81,3 +81,11 @@ This will result in security warnings about the certificate.
 * ensure that your configuration is OK
 * comment out the `caServer` line in config/traefik.yml 
 * it will need a `docker-compose down` then `docker-compose up -d`
+
+## Traefik dashboard
+The traefik dashboard has been configured for a secured access. It is available on https, on the domains lister in the docker-compose
+The user/passwords are defined in the secrets.auth_users.txt file
+
+## Metrics
+Prometheus metrics are exposed on localhost:8000/metrics
+TODO: secure access ?

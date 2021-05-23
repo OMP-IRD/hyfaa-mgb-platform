@@ -1,5 +1,6 @@
 api:
   dashboard: true
+#  debug: true
 #  insecure: true
 
 ## Writing Logs to a File, in JSON
@@ -28,6 +29,12 @@ entryPoints:
           scheme: https
   websecure:
     address: ":443"
+  metrics:
+    address: ":8000"
+
+metrics:
+  prometheus:
+    entryPoint: metrics
 
 certificatesResolvers:
   letsEncrypt:
