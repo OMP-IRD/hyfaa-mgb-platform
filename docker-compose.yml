@@ -45,16 +45,18 @@ services:
     labels:
       - "traefik.enable=true"
       # http router
+      - "traefik.http.routers.site.entrypoints=http"
       - "traefik.http.routers.site.rule=PathPrefix(`/site`)"
-      # HTTPS router
-      - "traefik.http.routers.site-secure.rule=PathPrefix(`/site`)"
-      - "traefik.http.routers.site-secure.tls=true"
-      - "traefik.http.routers.site-secure.tls.certresolver=letsEncrypt"
-      - "traefik.http.routers.site-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
       # HTTP -> HTTPS redirect
 #      - "traefik.http.middlewares.site.redirectscheme.scheme=https"
 #      - "traefik.http.middlewares.site.redirectscheme.permanent=false"
 #      - "traefik.http.routers.site.middlewares=site@docker"
+      # HTTPS router
+      - "traefik.http.routers.site-secure.entrypoints=https"
+      - "traefik.http.routers.site-secure.rule=PathPrefix(`/site`)"
+      - "traefik.http.routers.site-secure.tls=true"
+      - "traefik.http.routers.site-secure.tls.certresolver=letsEncrypt"
+      - "traefik.http.routers.site-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
 
   frontend:
     image: pigeosolutions/hyfaa-frontend:latest
@@ -64,20 +66,22 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP router
+      - "traefik.http.routers.frontend.entrypoints=http"
       - "traefik.http.routers.frontend.rule=( Host(`localhost`) || Host(`mgb-hyfaa.pigeo.fr`)) && PathPrefix(`/`)"
       - "traefik.http.routers.frontend.priority=2"
 #      - "traefik.http.middlewares.frontend.stripprefix.prefixes=/map"
 #      - "traefik.http.routers.frontend.middlewares=frontend@docker"
+      # HTTP -> HTTPS redirect
+#      - "traefik.http.middlewares.frontend.redirectscheme.scheme=https"
+#      - "traefik.http.middlewares.frontend.redirectscheme.permanent=false"
+#      - "traefik.http.routers.frontend.middlewares=frontend@docker"
       # HTTPS router
+      - "traefik.http.routers.frontend-secure.entrypoints=https"
       - "traefik.http.routers.frontend-secure.rule=( Host(`localhost`) || Host(`mgb-hyfaa.pigeo.fr`)) && PathPrefix(`/`)"
       - "traefik.http.routers.frontend-secure.priority=2"
       - "traefik.http.routers.frontend-secure.tls=true"
       - "traefik.http.routers.frontend-secure.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.frontend-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
-      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.frontend.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.frontend.redirectscheme.permanent=false"
-#      - "traefik.http.routers.frontend.middlewares=frontend@docker"
 
   frontend-assim:
     image: pigeosolutions/hyfaa-frontend:latest
@@ -89,18 +93,20 @@ services:
     labels:
       - "traefik.enable=true"
       # HTTP router
+      - "traefik.http.routers.frontend-assim.entrypoints=http"
       - "traefik.http.routers.frontend-assim.rule=Host(`hyfaa.pigeo.fr`) && PathPrefix(`/`)"
       - "traefik.http.routers.frontend-assim.priority=1"
+      # HTTP -> HTTPS redirect
+#      - "traefik.http.middlewares.frontend-assim.redirectscheme.scheme=https"
+#      - "traefik.http.middlewares.frontend-assim.redirectscheme.permanent=false"
+#      - "traefik.http.routers.frontend-assim.middlewares=frontend-assim@docker"
       # HTTPS router
+      - "traefik.http.routers.frontend-assim-secure.entrypoints=https"
       - "traefik.http.routers.frontend-assim-secure.rule=Host(`hyfaa.pigeo.fr`) && PathPrefix(`/`)"
       - "traefik.http.routers.frontend-assim-secure.priority=1"
       - "traefik.http.routers.frontend-assim-secure.tls=true"
       - "traefik.http.routers.frontend-assim-secure.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.frontend-assim-secure.tls.domains[0].main=hyfaa.pigeo.fr"
-      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.frontend-assim.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.frontend-assim.redirectscheme.permanent=false"
-#      - "traefik.http.routers.frontend-assim.middlewares=frontend-assim@docker"
 
   db:
     image: pigeosolutions/hyfaa-postgis:10-3.1
@@ -135,18 +141,20 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=hyfaa-mgb-platform_web"
       # HTTP router
+      - "traefik.http.routers.backend.entrypoints=http"
       - "traefik.http.routers.backend.rule=PathPrefix(`/api`, `/swaggerui`)"
       - "traefik.http.routers.backend.priority=11"
+      #  HTTP -> HTTPS redirect
+      - "traefik.http.middlewares.backend.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.backend.redirectscheme.permanent=false"
+      - "traefik.http.routers.backend.middlewares=backend@docker"
       # HTTPS router
+      - "traefik.http.routers.backend-secure.entrypoints=https"
       - "traefik.http.routers.backend-secure.rule=PathPrefix(`/api`, `/swaggerui`)"
       - "traefik.http.routers.backend-secure.priority=11"
-      - "traefik.http.routers.backend-secure.tls=false"
+      - "traefik.http.routers.backend-secure.tls=true"
       - "traefik.http.routers.backend-secure.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.backend-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
-      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.backend.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.backend.redirectscheme.permanent=false"
-#      - "traefik.http.routers.backend.middlewares=backend@docker"
 
 #  scheduler:
 #    restart: "no"
@@ -180,18 +188,20 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=hyfaa-mgb-platform_web"
       # HTTP router
+      - "traefik.http.routers.pg-tileserv.entrypoints=http"
       - "traefik.http.routers.pg-tileserv.rule=PathPrefix(`/tiles`)"
       - "traefik.http.routers.pg-tileserv.priority=10"
+      # HTTP -> HTTPS redirect
+#      - "traefik.http.middlewares.pg-tileserv.redirectscheme.scheme=https"
+#      - "traefik.http.middlewares.pg-tileserv.redirectscheme.permanent=false"
+#      - "traefik.http.routers.pg-tileserv.middlewares=pg-tileserv@docker"
       # HTTPS router
+      - "traefik.http.routers.pg-tileserv-secure.entrypoints=https"
       - "traefik.http.routers.pg-tileserv-secure.rule=PathPrefix(`/tiles`)"
       - "traefik.http.routers.pg-tileserv-secure.priority=10"
       - "traefik.http.routers.pg-tileserv-secure.tls=true"
       - "traefik.http.routers.pg-tileserv-secure.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.pg-tileserv-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
-      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.pg-tileserv.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.pg-tileserv.redirectscheme.permanent=false"
-#      - "traefik.http.routers.pg-tileserv.middlewares=pg-tileserv@docker"
 
 networks:
   web:
