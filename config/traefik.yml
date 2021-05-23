@@ -1,0 +1,42 @@
+api:
+  dashboard: true
+  insecure: true
+
+# Writing Logs to a File, in JSON
+log:
+  level: DEBUG
+  filePath: "log-file.log"
+  format: json
+
+# Configuring a buffer of 100 lines
+accessLog:
+  filePath: "log-access.log"
+  bufferingSize: 100
+
+entryPoints:
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+
+certificatesResolvers:
+  letsEncrypt:
+    acme:
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      email: jean.pommier@pi-geosolutions.fr
+      storage: "acme.json"
+      httpChallenge:
+        entryPoint: http
+
+# Defines a default certificate, for when is cannot create one from LE
+#tls:
+#  stores:
+#    default:
+#      defaultCertificate:
+#        certFile: path/to/cert.crt
+#        keyFile: path/to/cert.key
