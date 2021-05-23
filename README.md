@@ -70,3 +70,14 @@ The pg_tileserv server is accessible on http://localhost/tiles
 The interesting layers are:
 - **hyfaa.data_with_assim_aggregate_geo**: the MGB/HYFAA flow data for the last 15 days, in a json field (list of { date, flow_median, flow_anomaly} objects).
 - **geospatial.stations_geo**: the stations that can be queried for graph view
+
+## HTTPS
+Traefik, the proxy, has an SSL config ready, using Let's Encrypt (when developing, on localhost, it will use an auto-signed certificate, automatically).
+
+By default, it uses the **staging** backend from LetsEncrypt, to avoid reaching the limitations over certificates issuance.
+This will result in security warnings about the certificate.
+
+**When going to production,**
+* ensure that your configuration is OK
+* comment out the `caServer` line in config/traefik.yml 
+* it will need a `docker-compose down` then `docker-compose up -d`

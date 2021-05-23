@@ -27,6 +27,7 @@ providers:
 certificatesResolvers:
   letsEncrypt:
     acme:
+      # comment this line when going to production
       caServer: https://acme-staging-v02.api.letsencrypt.org/directory
       email: jean.pommier@pi-geosolutions.fr
       storage: "acme.json"
