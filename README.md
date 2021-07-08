@@ -83,8 +83,13 @@ This will result in security warnings about the certificate.
 * it will need a `docker-compose down` then `docker-compose up -d`
 
 ## Traefik dashboard
-The traefik dashboard has been configured for a secured access. It is available on https, on the domains lister in the docker-compose
+The traefik dashboard has been configured for a secured access. It is available on https, on the domains listed in the docker-compose
 The user/passwords are defined in the secrets.auth_users.txt file
+You can update the file's definition by running 
+```
+htpasswd -nb -C 31 admin [yourpasswd]
+```
+and replacing the file's content by the output of this command.
 
 ## Metrics
 Prometheus metrics are exposed on localhost:8000/metrics
