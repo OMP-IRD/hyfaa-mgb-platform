@@ -1,6 +1,10 @@
 version: '3.7'
 
 services:
+  traefik:
+    volumes:
+      - ./config/traefik-dev.yml:/traefik.yml:ro
+
   nginx-proxy:
     environment:
       - NGINX_PUBLIC_HOST=localhost

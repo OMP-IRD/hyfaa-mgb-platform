@@ -9,5 +9,41 @@ services:
       - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/work
     networks:
       - net
+
+  site:
+    labels:
+      # HTTP -> HTTPS redirect
+      - "traefik.http.middlewares.site.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.site.redirectscheme.permanent=false"
+      - "traefik.http.routers.site.middlewares=site@docker"
+
+  frontend:
+    labels:
+      # HTTP -> HTTPS redirect
+      - "traefik.http.middlewares.frontend.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.frontend.redirectscheme.permanent=false"
+      - "traefik.http.routers.frontend.middlewares=frontend@docker"
+
+  frontend-assim:
+    labels:
+      # HTTP -> HTTPS redirect
+      - "traefik.http.middlewares.frontend-assim.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.frontend-assim.redirectscheme.permanent=false"
+      - "traefik.http.routers.frontend-assim.middlewares=frontend-assim@docker"
+
+  backend:
+    labels:
+      # HTTP -> HTTPS redirect
+      - "traefik.http.middlewares.backend.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.backend.redirectscheme.permanent=false"
+      - "traefik.http.routers.backend.middlewares=backend@docker"
+
+  pg-tileserv:
+    labels:
+      # HTTP -> HTTPS redirect
+      - "traefik.http.middlewares.pg-tileserv.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.pg-tileserv.redirectscheme.permanent=false"
+      - "traefik.http.routers.pg-tileserv.middlewares=pg-tileserv@docker"
+
 networks:
   net:
