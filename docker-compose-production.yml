@@ -3,7 +3,8 @@ version: '3.7'
 services:
   scheduler:
     restart: "no"
-    image: pigeosolutions/hyfaa-scheduler:4.0
+    image: pigeosolutions/hyfaa-scheduler:4.1
+    user: $USER_ID:$GROUP_ID
     build: ./hyfaa-scheduler
     volumes:
       - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/work

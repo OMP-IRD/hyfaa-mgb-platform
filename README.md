@@ -46,6 +46,22 @@ Then it stops, the data will be published in the DB and the web platform will be
 
 There is no built-in CRON task to re-run the HYFAA scheduler. You'll have to run it manually (`docker-compose -f docker-compose.yml -f docker-compose-production.yml start scheduler`) or program yourself a CRON task on your machine, running the same command.
 
+#### Run the scheduler as current user
+The scheduler is writing data in work_configurations. By default, it runs as
+ root, which is then a mess to clean / manipulate.
+ 
+ In docker-compose, the user is configured using USER_ID and GROUP_ID environment
+  variables. By default, those variables are not set. You can set them
+  * either in your .bashrc file
+  * either before running the docker-compose command. For instance:
+  
+```bash
+USER_ID="$(id -u)" GROUP_ID="$(id -g)"; docker-compose ...
+```
+
+_**Note:**_ In a CRON task, env. vars defined in your .bashrc file are not
+ available. It's better to use this form.
+
 #### Publishing the data into the DB
 After the scheduler has finished running, you'll want to publish the data into the database. This is done using a script from (for now) the hyfaa-backend container.
 You can do it with the following command:
