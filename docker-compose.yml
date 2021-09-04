@@ -3,9 +3,9 @@ volumes:
   pg_data:
   acme:
 
-secrets:
-  auth_users:
-    file: ./secrets/auth_users.txt
+#secrets:
+#  auth_users:
+#    file: ./secrets/auth_users.txt
 
 services:
   traefik:
@@ -22,8 +22,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik.yml:/traefik.yml:ro
       - acme:/etc/traefik/acme
-    secrets:
-      - auth_users
+#    secrets:
+#      - auth_users
     networks:
       - web
     labels:
@@ -34,8 +34,8 @@ services:
       - "traefik.http.routers.dashboard.tls=true"
       - "traefik.http.routers.dashboard.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.dashboard.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
-      - "traefik.http.routers.dashboard.middlewares=auth"
-      - "traefik.http.middlewares.auth.basicauth.usersFile=/run/secrets/auth_users"
+#      - "traefik.http.routers.dashboard.middlewares=auth"
+#      - "traefik.http.middlewares.auth.basicauth.usersFile=/run/secrets/auth_users"
 
   site:
     image: pigeosolutions/hyfaa-site:latest
