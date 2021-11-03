@@ -33,7 +33,9 @@ Run `docker-compose up`.
 The platform will start, but no data will be loaded or processed.
 
 ### Run the platform in production mode (launch the hyfaa scheduler on startup)
-**You first need to apply the instructions from the [scheduler's README](hyfaa-scheduler/work_configurations/operational_niger_gsmap/README.md)**
+**You first need to**
+- apply the instructions from the [scheduler's README](hyfaa-scheduler/work_configurations/operational_niger_gsmap/README.md)
+- put your hydroweb credentials in secrets/hydroweb_*.txt files (see [secrets/README.md](secrets/README.md))
 
 Then start the composition:
 ```
@@ -49,12 +51,12 @@ There is no built-in CRON task to re-run the HYFAA scheduler. You'll have to run
 #### Run the scheduler as current user
 The scheduler is writing data in work_configurations. By default, it runs as
  root, which is then a mess to clean / manipulate.
- 
+
  In docker-compose, the user is configured using USER_ID and GROUP_ID environment
   variables. By default, those variables are not set. You can set them
   * either in your .bashrc file
   * either before running the docker-compose command. For instance:
-  
+
 ```bash
 USER_ID="$(id -u)" GROUP_ID="$(id -g)"; docker-compose ...
 ```
@@ -95,13 +97,13 @@ This will result in security warnings about the certificate.
 
 **When going to production,**
 * ensure that your configuration is OK
-* comment out the `caServer` line in config/traefik.yml 
+* comment out the `caServer` line in config/traefik.yml
 * it will need a `docker-compose down` then `docker-compose up -d`
 
 ## Traefik dashboard
 The traefik dashboard has been configured for a secured access. It is available on https, on the domains listed in the docker-compose
 The user/passwords are defined in the secrets.auth_users.txt file
-You can update the file's definition by running 
+You can update the file's definition by running
 ```
 htpasswd -nb -C 31 admin [yourpasswd]
 ```

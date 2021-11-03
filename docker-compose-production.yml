@@ -1,11 +1,23 @@
 version: '3.7'
 
+secrets:
+  hydroweb_user:
+    file: ./secrets/hydroweb_user.txt
+  hydroweb_password:
+    file: ./secrets/hydroweb_password.txt
+
 services:
   scheduler:
     restart: "no"
-    image: pigeosolutions/hyfaa-scheduler:4.1
+    image: pigeosolutions/hyfaa-scheduler:4.2
     user: $USER_ID:$GROUP_ID
     build: ./hyfaa-scheduler
+    secrets:
+      - hydroweb_user
+      - hydroweb_password
+    environment:
+      - HYDROWEB_USER_FILE=/run/secrets/hydroweb_user
+      - HYDROWEB_PASSWORD_FILE=/run/secrets/hydroweb_password
     volumes:
       - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/work
     networks:
