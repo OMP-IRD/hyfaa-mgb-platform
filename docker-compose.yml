@@ -8,73 +8,59 @@ volumes:
 #    file: ./secrets/auth_users.txt
 
 services:
-  traefik:
-    image: traefik:v2.4
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8000:8000"
-    expose:
-      # traefik dashboard port
-      - 8080
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./config/traefik.yml:/traefik.yml:ro
-      - acme:/etc/traefik/acme
-#    secrets:
-#      - auth_users
-    networks:
-      - web
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=(Host(`admin.localhost`) ||Host(`ird1.pigeo.fr`) ) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.entrypoints=websecure"
-      - "traefik.http.routers.dashboard.tls=true"
-      - "traefik.http.routers.dashboard.tls.certresolver=letsEncrypt"
-      - "traefik.http.routers.dashboard.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
-#      - "traefik.http.routers.dashboard.middlewares=auth"
-#      - "traefik.http.middlewares.auth.basicauth.usersFile=/run/secrets/auth_users"
+# We're not using this one anymore. We're using an externally configured traefik, see https://github.com/OMP-IRD/traefik-proxy
+#   traefik:
+#     image: traefik:v2.4
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#       - "8000:8000"
+#     expose:
+#       # traefik dashboard port
+#       - 8080
+#     volumes:
+#       - /etc/localtime:/etc/localtime:ro
+#       - /var/run/docker.sock:/var/run/docker.sock
+#       - ./config/traefik.yml:/traefik.yml:ro
+#       - acme:/etc/traefik/acme
+# #    secrets:
+# #      - auth_users
+#     networks:
+#       - traefik-proxy_proxy_network
+#     labels:
+#       - "traefik.enable=true"
+#       - "traefik.http.routers.dashboard.rule=(Host(`admin.localhost`) ||Host(`ird1.pigeo.fr`) ) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+#       - "traefik.http.routers.dashboard.service=api@internal"
+#       - "traefik.http.routers.dashboard.entrypoints=websecure"
+#       - "traefik.http.routers.dashboard.tls=true"
+#       - "traefik.http.routers.dashboard.tls.certresolver=letsEncrypt"
+#       - "traefik.http.routers.dashboard.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
+# #      - "traefik.http.routers.dashboard.middlewares=auth"
+# #      - "traefik.http.middlewares.auth.basicauth.usersFile=/run/secrets/auth_users"
 
   site:
     image: pigeosolutions/hyfaa-site:latest
     restart: unless-stopped
     networks:
-      - web
+      - traefik-proxy_proxy_network
     labels:
       - "traefik.enable=true"
-#      # http router
-#      - "traefik.http.routers.site.entrypoints=http"
-#      - "traefik.http.routers.site.rule=PathPrefix(`/site`)"
-#      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.site.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.site.redirectscheme.permanent=false"
-#      - "traefik.http.routers.site.middlewares=site@docker"
       # HTTPS router
       - "traefik.http.routers.site-secure.entrypoints=websecure"
-      - "traefik.http.routers.site-secure.rule=PathPrefix(`/site`)"
+      - "traefik.http.routers.site-secure.rule=( Host(`localhost`) || Host(`mgb-hyfaa.pigeo.fr`) || Host(`hyfaa.pigeo.fr`)) && PathPrefix(`/site`)"
+      - "traefik.http.routers.site-secure.priority=3"
       - "traefik.http.routers.site-secure.tls=true"
       - "traefik.http.routers.site-secure.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.site-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
+      - "traefik.http.routers.site-secure.tls.domains[0].sans=hyfaa.pigeo.fr"
 
   frontend:
     image: pigeosolutions/hyfaa-frontend:latest
     restart: unless-stopped
     networks:
-      - web
+      - traefik-proxy_proxy_network
     labels:
       - "traefik.enable=true"
-#      # HTTP router
-#      - "traefik.http.routers.frontend.entrypoints=http"
-#      - "traefik.http.routers.frontend.rule=( Host(`localhost`) || Host(`mgb-hyfaa.pigeo.fr`)) && PathPrefix(`/`)"
-#      - "traefik.http.routers.frontend.priority=2"
-##      - "traefik.http.middlewares.frontend.stripprefix.prefixes=/map"
-##      - "traefik.http.routers.frontend.middlewares=frontend@docker"
-#      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.frontend.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.frontend.redirectscheme.permanent=false"
-#      - "traefik.http.routers.frontend.middlewares=frontend@docker"
       # HTTPS router
       - "traefik.http.routers.frontend-secure.entrypoints=websecure"
       - "traefik.http.routers.frontend-secure.rule=( Host(`localhost`) || Host(`mgb-hyfaa.pigeo.fr`)) && PathPrefix(`/`)"
@@ -89,17 +75,9 @@ services:
     volumes:
       - ./config/frontend/assets/settings.json:/usr/share/nginx/html/assets/settings.json
     networks:
-      - web
+      - traefik-proxy_proxy_network
     labels:
       - "traefik.enable=true"
-#      # HTTP router
-#      - "traefik.http.routers.frontend-assim.entrypoints=http"
-#      - "traefik.http.routers.frontend-assim.rule=Host(`hyfaa.pigeo.fr`) && PathPrefix(`/`)"
-#      - "traefik.http.routers.frontend-assim.priority=1"
-#      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.frontend-assim.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.frontend-assim.redirectscheme.permanent=false"
-#      - "traefik.http.routers.frontend-assim.middlewares=frontend-assim@docker"
       # HTTPS router
       - "traefik.http.routers.frontend-assim-secure.entrypoints=websecure"
       - "traefik.http.routers.frontend-assim-secure.rule=Host(`hyfaa.pigeo.fr`) && PathPrefix(`/`)"
@@ -125,8 +103,10 @@ services:
     build:
       context: ./hyfaa-backend
       dockerfile: docker/Dockerfile
-    ports:
-      - 5000:5000
+    expose:
+      - 5000
+    # ports:
+    #   - 5000:5000
     environment:
       - DATABASE_URI_RW=postgresql://hyfaa_publisher:hyfaa_publisher@db:5432/mgb_hyfaa
       - DATABASE_URI=postgresql://hyfaa_backend:hyfaa_backend@db:5432/mgb_hyfaa
@@ -136,34 +116,20 @@ services:
       - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/hyfaa-scheduler/data
     networks:
       - internal
-      - web
+      - traefik-proxy_proxy_network
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=hyfaa-mgb-platform_web"
-#      # HTTP router
-#      - "traefik.http.routers.backend.entrypoints=http"
-#      - "traefik.http.routers.backend.rule=PathPrefix(`/api`, `/swaggerui`)"
-#      - "traefik.http.routers.backend.priority=11"
-#      #  HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.backend.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.backend.redirectscheme.permanent=false"
-#      - "traefik.http.routers.backend.middlewares=backend@docker"
+      # Tell traefik which network to look on, since this container is connected to 2 different nets
+      - "traefik.docker.network=traefik-proxy_proxy_network"
       # HTTPS router
       - "traefik.http.routers.backend-secure.entrypoints=websecure"
-      - "traefik.http.routers.backend-secure.rule=PathPrefix(`/api`, `/swaggerui`)"
-      - "traefik.http.routers.backend-secure.priority=11"
+      - "traefik.http.routers.backend-secure.rule=( Host(`localhost`) || Host(`mgb-hyfaa.pigeo.fr`) || Host(`hyfaa.pigeo.fr`)) && PathPrefix(`/api/v1`) || PathPrefix(`/swaggerui`)"
+      - "traefik.http.routers.backend-secure.priority=4"
       - "traefik.http.routers.backend-secure.tls=true"
       - "traefik.http.routers.backend-secure.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.backend-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
+      - "traefik.http.routers.backend-secure.tls.domains[0].sans=hyfaa.pigeo.fr"
 
-#  scheduler:
-#    restart: "no"
-#    image: pigeosolutions/hyfaa-scheduler:4.0
-#    build: ./hyfaa-scheduler
-#    volumes:
-#      - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/work
-#    networks:
-#      - net
 
   pg-tileserv:
     image: pigeosolutions/pg_tileserv:latest-alpine-3.12
@@ -177,32 +143,29 @@ services:
         VERSION: latest-alpine-3.12
     env_file:
       - pg_tileserv.env
+    expose:
+      - 7800
 #    ports:
 #      - 7800:7800
     volumes:
       - ./config/:/config/
     networks:
       - internal
-      - web
+      - traefik-proxy_proxy_network
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=hyfaa-mgb-platform_web"
-#      # HTTP router
-#      - "traefik.http.routers.pg-tileserv.entrypoints=http"
-#      - "traefik.http.routers.pg-tileserv.rule=PathPrefix(`/tiles`)"
-#      - "traefik.http.routers.pg-tileserv.priority=10"
-#      # HTTP -> HTTPS redirect
-#      - "traefik.http.middlewares.pg-tileserv.redirectscheme.scheme=https"
-#      - "traefik.http.middlewares.pg-tileserv.redirectscheme.permanent=false"
-#      - "traefik.http.routers.pg-tileserv.middlewares=pg-tileserv@docker"
+      # Tell traefik which network to look on, since this container is connected to 2 different nets
+      - "traefik.docker.network=traefik-proxy_proxy_network"
       # HTTPS router
       - "traefik.http.routers.pg-tileserv-secure.entrypoints=websecure"
-      - "traefik.http.routers.pg-tileserv-secure.rule=PathPrefix(`/tiles`)"
-      - "traefik.http.routers.pg-tileserv-secure.priority=10"
+      - "traefik.http.routers.pg-tileserv-secure.rule=( Host(`localhost`) || Host(`mgb-hyfaa.pigeo.fr`) || Host(`hyfaa.pigeo.fr`)) && PathPrefix(`/tiles`)"
+      - "traefik.http.routers.pg-tileserv-secure.priority=5"
       - "traefik.http.routers.pg-tileserv-secure.tls=true"
       - "traefik.http.routers.pg-tileserv-secure.tls.certresolver=letsEncrypt"
       - "traefik.http.routers.pg-tileserv-secure.tls.domains[0].main=mgb-hyfaa.pigeo.fr"
+      - "traefik.http.routers.pg-tileserv-secure.tls.domains[0].sans=hyfaa.pigeo.fr"
 
 networks:
-  web:
+  traefik-proxy_proxy_network:
+    external: true
   internal:

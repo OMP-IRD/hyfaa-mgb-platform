@@ -21,7 +21,7 @@ services:
     volumes:
       - ./hyfaa-scheduler/work_configurations/operational_niger_gsmap:/work
     networks:
-      - net
+      - internal
 
   site:
     labels:
@@ -59,4 +59,4 @@ services:
       - "traefik.http.routers.pg-tileserv.middlewares=pg-tileserv@docker"
 
 networks:
-  net:
+  internal:

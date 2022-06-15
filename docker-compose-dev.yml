@@ -1,9 +1,9 @@
 version: '3.7'
 
 services:
-  traefik:
-    volumes:
-      - ./config/traefik-dev.yml:/traefik.yml:ro
+#  traefik:
+#    volumes:
+#      - ./config/traefik-dev.yml:/traefik.yml:ro
 
   nginx-proxy:
     environment:
