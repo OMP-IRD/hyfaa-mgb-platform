@@ -11,7 +11,7 @@ services:
     restart: "no"
     image: pigeosolutions/hyfaa-scheduler:20240607-1623-ab44fe8
     user: $USER_ID:$GROUP_ID
-    build: ./hyfaa-scheduler
+    #build: ./hyfaa-scheduler
     secrets:
       - hydroweb_user
       - hydroweb_password
