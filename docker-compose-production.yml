@@ -9,7 +9,7 @@ secrets:
 services:
   scheduler:
     restart: "no"
-    image: pigeosolutions/hyfaa-scheduler:4.2
+    image: pigeosolutions/hyfaa-scheduler:20240607-1623-ab44fe8
     user: $USER_ID:$GROUP_ID
     build: ./hyfaa-scheduler
     secrets:
